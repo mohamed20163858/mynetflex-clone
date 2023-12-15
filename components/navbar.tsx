@@ -1,16 +1,37 @@
 import NavbarItem from "./navbarItem";
 import { BsSearch, BsBell, BsChevronDown } from "react-icons/bs";
 import MobileMenu from "./MobileMenu";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AccountMenu from "./AccountMenu";
+
+const TOP_OFFEST = 66;
 const Navbar = () => {
     const [ showMobileMenu, setShowMobileMenu]  = useState(false);
+    const [ showAccountMenu, setShowAccountMenu]  = useState(false);
+    const [ showBackground, setShowBackground] = useState(false);
+    useEffect(() => {
+        const handleScroll = () => {
+            if(window.scrollY >= TOP_OFFEST) {
+                setShowBackground(true);
+            }
+            else {
+                setShowBackground(false);
+            }
+        }
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    },[]);
     const toggleMobileMenu =  useCallback(() => {
         setShowMobileMenu((current) => !current);
     }, []);
+    const toggleAccountMenu =  useCallback(() => {
+        setShowAccountMenu((current) => !current);
+    }, []);
     return (
     <nav className="w-full z-40 fixed">
-        <div className="
+        <div className={`
             px-4
             md:px-16
             py-6
@@ -19,10 +40,8 @@ const Navbar = () => {
             items-center
             transition
             duration-500
-            bg-zinc-900
-            bg-opacity-90
-
-        ">
+            ${showBackground ? "bg-zinc-900 bg-opacity-90" : ""}
+        `}>
             <img src="/images/logo.png" alt="logo" className="
                 h-4
                 lg:h-7
@@ -43,7 +62,7 @@ const Navbar = () => {
             </div>
             <div onClick={toggleMobileMenu} className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative">
                 <p className="text-white text-sm">Browse</p>
-                <BsChevronDown className="text-white transition" />
+                <BsChevronDown className={`text-white transition ${showMobileMenu ? "rotate-180" : "rotate-0"}`} />
                 <MobileMenu visible={showMobileMenu} />
             </div>
             <div className="flex flex-row ml-auto gap-7 items-center">
@@ -53,12 +72,12 @@ const Navbar = () => {
                 <div className="text-gray-200 hover:text-gray-300 cursor-pointer transition">
                     <BsBell />
                 </div>
-                <div className="flex flex-row items-center gap-2 cursor-pointer relative">
+                <div onClick={toggleAccountMenu} className="flex flex-row items-center gap-2 cursor-pointer relative">
                     <div className="h-6 w-6 lg:h-10 lg:w-10 overflow-hidden rounded-md">
                         <img src="/images/default-blue.png" alt="person" />
                     </div>
-                    <BsChevronDown className="text-white transition" />
-                    <AccountMenu />
+                    <BsChevronDown className={`text-white transition ${showAccountMenu ? "rotate-180" : "rotate-0"}`} />
+                    <AccountMenu visible={showAccountMenu} />
                 </div>
             </div>
         </div>
