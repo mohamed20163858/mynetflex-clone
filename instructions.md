@@ -27,6 +27,10 @@ npm i @next-auth/prisma-adapter
 
 npm install swr
 
+npm install lodash
+
+npm install -D @types/lodash
+
 for google auth the url is:- 
 http://localhost:3000/api/auth/callback/google
 
