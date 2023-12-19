@@ -3,12 +3,11 @@ import { without } from "lodash";
 import serverAuth from "@/lib/serverAuth";
 import prismadb from "@/lib/prismadb"; 
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         if(req.method === "POST") {
             const { currentUser } = await serverAuth(req);
             const { movieId } = req.body;
-
             const existingMovie = prismadb.movie.findUnique({
                 where: {
                     id: movieId
