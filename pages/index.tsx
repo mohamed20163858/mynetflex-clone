@@ -1,5 +1,5 @@
-import { getSession } from "next-auth/react";
-import { NextPageContext } from "next";
+// import { getSession } from "next-auth/react";
+// import { NextPageContext } from "next";
 import Navbar from "@/components/navbar";
 import Billboard from "@/components/Billboard";
 import MovieList from "@/components/MovieList";
@@ -7,9 +7,14 @@ import useMovieList from "@/hooks/useMovieList";
 import useFavorites from "@/hooks/useFavorites";
 import InfoModal from "@/components/InfoModal";
 import useInfoModal from "@/hooks/useInfoModal";
+// added config
+import { authOptions } from './api/auth/[...nextauth]';
+import { getServerSession } from "next-auth/next";
+import { GetServerSidePropsContext } from "next";
 
-export async function getServerSideProps(context: NextPageContext) {
-  const session = await getSession(context);
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions );
   if(!session) {
     return {
       redirect: {
